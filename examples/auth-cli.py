@@ -3,6 +3,7 @@ import json
 import sys
 import time
 
+# pip install grpcio-tools
 import grpc
 
 try:
@@ -123,7 +124,6 @@ cmdparser = subparsers.add_parser("refresh", help="Get a new session using a sav
 cmdparser.set_defaults(func=refresh)
 
 args = parser.parse_args()
-credentials = None
 if args.insecure:
   channel = grpc.insecure_channel(args.endpoint_url)
 else:
