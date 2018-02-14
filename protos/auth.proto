@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+option csharp_namespace = "ListenField.Client.Auth";
 package listenfield.auth;
 
 import "api.proto";
