@@ -89,13 +89,15 @@ cmd = [
   protoc,
   '--plugin=protoc-gen-grpc=' + grpc_plugin,
   '-I', '../protos', '-I', protobuf_tools,
-  '--csharp_out=.', '--grpc_out=ListenField/Client',
+  '--csharp_out=.',
+  # XXX the plugin generates all grpc files in one output directory!
+  '--grpc_out=ListenField/Client',
   '--csharp_opt=base_namespace=',
-  '../protos/common-rpc.proto',
-  '../protos/common-types.proto',
-  '../protos/catalog-rpc.proto',
+  '../protos/repo/common-rpc.proto',
+  '../protos/repo/common-types.proto',
+  '../protos/repo/catalog-rpc.proto',
+  '../protos/repo/catalog-types.proto',
   '../protos/api.proto',
-  '../protos/catalog-types.proto',
   '../protos/auth.proto',
 ]
 print(*cmd)

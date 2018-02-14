@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-option csharp_namespace = "ListenField.Client.Repo";
 package listenfield.repo;
+option csharp_namespace = "ListenField.Client.Repo";
 
-import "common-types.proto";
+import "repo/common-types.proto";
 import "api.proto";
 
 message UpsertTimeScopeRequest {

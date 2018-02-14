@@ -5,8 +5,9 @@ syntax = "proto3";
 // we can maintain compatibility using `import public ...`
 
 package listenfield.repo.catalog;
+option csharp_namespace = "ListenField.Client.Repo";
 
-import "common-types.proto";
+import "repo/common-types.proto";
 
 message ContactInfo {
   message ContactTypeEnum {
