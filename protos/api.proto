@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package listenfield;
+
+import "status.proto";
+
+message EchoMessage {
+  string message = 1;
+}
+
+message BatchedQueryMetadata {
+  string page_token = 2;
+  uint32 count = 3;
+  uint32 scanned = 4;
+}
+
+message SimpleGetRequest {
+  string UUID = 1;
+}
+
+message Grant {
+  message TypeEnum {
+    enum Value {
+      INVALID = 0;
+      read = 1;
+      write = 2;
+      grant = 3;
+      chown = 4;
+    }
+  }
+
+  // user or group uuid, or "PUBLIC"
+  string grantee = 1;
+  TypeEnum.Value type = 2;
+}
+
+message GrantList {
+  repeated Grant grants = 1;
+}
+
+message ChangeGrantsRequest {
+  repeated string UUIDs = 1;
+  repeated Grant add = 2;
+  repeated Grant remove = 3;
+}
+
+message ChangeGrantsResult {
+  string UUID = 1;
+  repeated Grant grants = 2;
+  google.rpc.Status error = 3;
+}
+
+// copy this into each package where applicable
+// service Test {
+//   rpc Echo (listenfield.EchoMessage) returns (listenfield.EchoMessage);
+// }

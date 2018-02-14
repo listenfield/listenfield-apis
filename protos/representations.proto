@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package ADAPT.representations;
+
+// actual representation message TODO, not sure if we'll need it
+
+message NumericRepresentationValue {
+  // NumericRepresentation Representation = 1;
+  NumericValue Value = 2;
+  UnitOfMeasure UserProvidedUnitOfMeasure = 3;
+}

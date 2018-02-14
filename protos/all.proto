@@ -1,0 +1,6 @@
+// import this to get everything, for example if using protobuf.js
+syntax = "proto3";
+
+import "api.proto";
+import "common-rpc.proto";
+import "catalog-rpc.proto";

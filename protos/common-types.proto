@@ -1,0 +1,188 @@
+syntax = "proto3";
+
+// Later we might want to split this into separate files, but I think even so
+// there's value in simplifying things by having a simple common-types file;
+// we can maintain compatibility using `import public ...`
+
+// import "representations.proto";
+
+package listenfield.repo.common;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+message CompoundIdentifier {
+  message CompoundIdentifierTypeEnum {
+    enum Value {
+      UUID = 0;
+      String = 1;
+      LongInt = 2;
+      URI = 3;
+    }
+  }
+  message IdSourceTypeEnum {
+    enum Value {
+      URI = 0;
+      GLN = 1;
+    }
+  }
+  message UniqueId {
+    string Id = 1;
+    CompoundIdentifierTypeEnum.Value CIType = 2;
+    string Source = 3;
+    IdSourceTypeEnum.Value SourceType = 4;
+  }
+
+  string UUID = 1;
+  repeated UniqueId UniqueIds = 2;
+}
+
+// We don't actually expose Representations, UnitOfMeasures, etc by the API,
+// only passing the domainIDs back and forth and trusting the client either
+// has the latest XML from ADAPT, or doesn't care.
+
+message NumericValue {
+  double Value = 1;
+  string UnitOfMeasureId = 2;
+}
+
+message NumericRepresentationValue {
+  string RepresentationId = 1;
+  NumericValue Value = 2;
+  string UnitOfMeasureId = 3;
+}
+
+message StringRepresentationValue {
+  string RepresentationId = 1;
+  string Value = 2;
+  string UnitOfMeasureId = 3;
+}
+
+message EnumeratedRepresentationValue {
+  string RepresentationId = 1;
+  string Value = 2;
+  string UnitOfMeasureId = 3;
+}
+
+message ContextItem {
+  string ContextItemType = 1; // DomainID for a Representation
+  oneof representation_value {
+    NumericRepresentationValue NumericRepresentationValue = 2;
+    StringRepresentationValue StringRepresentationValue = 3;
+    EnumeratedRepresentationValue EnumeratedRepresentationValue = 4;
+  }
+  repeated ContextItem ContextItems = 5;
+}
+
+message TimeScope {
+  message DateContextEnum {
+    enum Value {
+      Unspecified = 0;
+
+      Approval = 1;
+      ProposedStart = 2;
+      ProposedEnd = 3;
+      CropSeason = 4;
+      TimingEvent = 5;
+      ActualStart = 6;
+      ActualEnd = 7;
+      RequestedStart = 8;
+      RequestedEnd = 9;
+      Expiration = 10;
+      Creation = 11;
+      Modification = 12;
+      ValidityRange = 13;
+      RequestedShipping = 14;
+      ActualShipping = 15;
+      Calibration = 16;
+      Load = 17;
+      Unload = 18;
+      Suspend = 19;
+      Resume = 20;
+    }
+  }
+
+  message Data {
+    string Description = 1;
+    DateContextEnum.Value DateContext = 2;
+    google.protobuf.Timestamp TimeStamp1 = 3;
+    google.protobuf.Timestamp TimeStamp2 = 4;
+    Location Location1 = 5;
+    Location Location2 = 6;
+    google.protobuf.Duration Duration = 7;
+  }
+
+  string UUID = 1;
+  repeated CompoundIdentifier.UniqueId Ids = 2;
+  Data data = 3;
+  string Owner = 4;
+  repeated ContextItem ContextItems = 300;
+}
+
+message Point {
+  double X = 1;
+  double Y = 2;
+  double Z = 3;
+}
+
+message GpsSource {
+  enum GpsSourceEnum {
+    Unknown = 0;
+    Drawn = 1;
+    MobileGPS = 2;
+    DeereRTK = 3;
+    DeereRTKX = 4;
+    DeereSF1 = 5;
+    DeereSF2 = 6;
+    DeereWAAS = 7;
+    GNSSfix = 8;
+    DGNSSfix = 9;
+    PreciseGNSS = 10;
+    RTKFixedInteger = 11;
+    RTKFloat = 12;
+    EstDRmode = 13;
+    ManualInput = 14;
+    SimulateMode = 15;
+    DesktopGeneratedData = 16;
+    Other = 17;
+  }
+
+  GpsSourceEnum SourceType = 1;
+  NumericRepresentationValue EstimatedPrecision = 2;
+  NumericRepresentationValue HorizontalAccuracy = 3;
+  NumericRepresentationValue VerticalAccuracy = 4;
+  uint32 NumberOfSatellites = 5;
+  string GpsUtcTime = 6;
+}
+
+message ShapeTypeEnum {
+  enum Value {
+    LinearRing = 0;
+    LineString = 1;
+    MultiLineString = 2;
+    MultiPoint = 3;
+    MultiPolygon = 4;
+    Point = 5;
+    Polygon = 6;
+    RasterGrid = 7;
+  }
+}
+
+message LinearRing {
+  repeated Point Points = 1;
+}
+
+message Polygon {
+  LinearRing ExteriorRing = 1;
+  repeated LinearRing InteriorRings = 2;
+}
+
+message MultiPolygon {
+  repeated Polygon Polygons = 1;
+}
+
+message Location {
+  Point position = 1;
+  GpsSource GpsSource = 2;
+}

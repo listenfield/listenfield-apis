@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package listenfield.auth;
+
+import "api.proto";
+
+message LoginWithPasswordRequest {
+  string Username = 1;
+  string Password = 2;
+  string MFACode = 3;
+  map<string, string> ChallengeData = 4;
+}
+
+message LoginChallenge {
+  message ChallengeTypeEnum {
+    enum Value {
+      MFA = 0;
+      PASSWORD_VERIFIER = 1;
+      NEW_PASSWORD = 2;
+    }
+  }
+
+  ChallengeTypeEnum.Value Type = 1;
+  map<string, string> Data = 2;
+}
+
+message SessionInfo {
+  string AccessToken = 1;
+  string Username = 2;
+  string TokenType = 3;
+  string RefreshToken = 4;
+  string IdToken = 5;
+}
+
+message LoginResult {
+  oneof login_res_oneof {
+    SessionInfo session = 1;
+    LoginChallenge challenge = 2;
+  }
+}
+
+message RefreshRequest {
+  string RefreshToken = 1;
+  string Username = 2;
+}
+
+service Test {
+  rpc Echo (listenfield.EchoMessage) returns (listenfield.EchoMessage);
+}
+
+service Authentication {
+  rpc LoginWithPassword (stream LoginWithPasswordRequest) returns (stream LoginResult);
+  rpc Refresh (RefreshRequest) returns (SessionInfo);
+}

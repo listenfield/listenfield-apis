@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package listenfield.repo;
+
+import "common-types.proto";
+import "api.proto";
+
+message UpsertTimeScopeRequest {
+  listenfield.repo.common.TimeScope item = 1;
+}
+
+message UpsertTimeScopeResult {
+  listenfield.repo.common.TimeScope item = 1;
+}
+
+message QueryTimeScopeRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+}
+
+message QueryTimeScopeResult {
+  oneof query_res_oneof {
+    listenfield.repo.common.TimeScope item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Test {
+  rpc Echo (listenfield.EchoMessage) returns (listenfield.EchoMessage);
+}
+
+service TimeScopes {
+  rpc Upsert (UpsertTimeScopeRequest) returns (UpsertTimeScopeResult);
+  rpc Query (QueryTimeScopeRequest) returns (stream QueryTimeScopeResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.common.TimeScope);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}

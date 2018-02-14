@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package listenfield.repo;
+
+import "catalog-types.proto";
+import "api.proto";
+
+message UpsertFieldBoundaryRequest {
+  listenfield.repo.catalog.FieldBoundary item = 1;
+}
+
+message UpsertFieldBoundaryResult {
+  listenfield.repo.catalog.FieldBoundary item = 1;
+}
+
+message QueryFieldBoundaryRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string GrowerId = 3;
+  repeated string TimeScopeIds = 4;
+}
+
+message QueryFieldBoundaryResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.FieldBoundary item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service FieldBoundaries {
+  rpc Upsert (UpsertFieldBoundaryRequest) returns (UpsertFieldBoundaryResult);
+  rpc Query (QueryFieldBoundaryRequest) returns (stream QueryFieldBoundaryResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.FieldBoundary);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertFieldRequest {
+  listenfield.repo.catalog.Field item = 1;
+}
+
+message UpsertFieldResult {
+  listenfield.repo.catalog.Field item = 1;
+}
+
+message QueryFieldRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string FarmId = 3;
+  string FieldBoundaryId = 4;
+  repeated string TimeScopeIds = 5;
+}
+
+message QueryFieldResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.Field item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Fields {
+  rpc Upsert (UpsertFieldRequest) returns (UpsertFieldResult);
+  rpc Query (QueryFieldRequest) returns (stream QueryFieldResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Field);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertFarmRequest {
+  listenfield.repo.catalog.Farm item = 1;
+}
+
+message UpsertFarmResult {
+  listenfield.repo.catalog.Farm item = 1;
+}
+
+message QueryFarmRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string GrowerId = 3;
+}
+
+message QueryFarmResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.Farm item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Farms {
+  rpc Upsert (UpsertFarmRequest) returns (UpsertFarmResult);
+  rpc Query (QueryFarmRequest) returns (stream QueryFarmResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Farm);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertGrowerRequest {
+  listenfield.repo.catalog.Grower item = 1;
+}
+
+message UpsertGrowerResult {
+  listenfield.repo.catalog.Grower item = 1;
+}
+
+message QueryGrowerRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string Name = 3;
+}
+
+message QueryGrowerResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.Grower item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Growers {
+  rpc Upsert (UpsertGrowerRequest) returns (UpsertGrowerResult);
+  rpc Query (QueryGrowerRequest) returns (stream QueryGrowerResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Grower);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertCropRequest {
+  listenfield.repo.catalog.Crop item = 1;
+}
+
+message UpsertCropResult {
+  listenfield.repo.catalog.Crop item = 1;
+}
+
+message QueryCropRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string Name = 3;
+}
+
+message QueryCropResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.Crop item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Crops {
+  rpc Upsert (UpsertCropRequest) returns (UpsertCropResult);
+  rpc Query (QueryCropRequest) returns (stream QueryCropResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Crop);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertCropZoneRequest {
+  listenfield.repo.catalog.CropZone item = 1;
+}
+
+message UpsertCropZoneResult {
+  listenfield.repo.catalog.CropZone item = 1;
+}
+
+message QueryCropZoneRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string FieldId = 3;
+  string CropId = 4;
+  repeated string TimeScopeIds = 5;
+}
+
+message QueryCropZoneResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.CropZone item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service CropZones {
+  rpc Upsert (UpsertCropZoneRequest) returns (UpsertCropZoneResult);
+  rpc Query (QueryCropZoneRequest) returns (stream QueryCropZoneResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.CropZone);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
