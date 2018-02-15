@@ -26,16 +26,16 @@ Browse the `protos` folder and find the API you want to interact with. Each prot
 
 The repository currently includes these APIs:
 
-- ListenField Auth (`auth.proto`): authenticating against ListenField accounts, for use with the other APIs, and management of these accounts and associated information.
+- ListenField Auth ([auth.proto](./protos/auth.proto)): authenticating against ListenField accounts, for use with the other APIs, and management of these accounts and associated information.
 
-- ListenField Farm Repository (`repo/`): a specialized database of information used by various other APIs, allowing your code to access and manage your data.
+- ListenField Farm Repository ([repo/](./protos/repo)): a specialized database of information used by various other APIs, allowing your code to access and manage your data.
 
 ## Example code
 
 In the `examples` folder, you'll find:
 
-- Authentication client (`auth-cli.py`): a very simple example of how to interact with the APIs in Python; also useful in practical use for interacting with the authentication system (including authenticating and refreshing sessions) from the command line.
+- Authentication client ([auth-cli.py](./examples/auth-cli.py)): a very simple example of how to interact with the APIs in Python; also useful in practical use for interacting with the authentication system (including authenticating and refreshing sessions) from the command line.
 
-- Repository examples (`repo-cli.py`): demonstrates a few Repository calls in Python.
+- Repository examples ([repo-cli.py](./examples/repo-cli.py)): demonstrates a few Repository calls in Python.
 
 Before running any example code, you need to generate and install the respective client library. In the case of python, generate the library running the `python/gen-protos.py` script, then copy the resulting `listenfield_client` folder to your `site-packages` folder in the Python path.
