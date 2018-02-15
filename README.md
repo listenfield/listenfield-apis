@@ -34,8 +34,8 @@ The repository currently includes these APIs:
 
 In the `examples` folder, you'll find:
 
-- Authentication client (`auth-client.py`): a very simple example of how to interact with the APIs in Python; also useful in practical use for interacting with the authentication system (including authenticating and refreshing sessions) from the command line.
+- Authentication client (`auth-cli.py`): a very simple example of how to interact with the APIs in Python; also useful in practical use for interacting with the authentication system (including authenticating and refreshing sessions) from the command line.
 
-- Repository examples (`repo-client.py`): demonstrates a few Repository calls in Python.
+- Repository examples (`repo-cli.py`): demonstrates a few Repository calls in Python.
 
 Before running any example code, you need to generate and install the respective client library. In the case of python, generate the library running the `python/gen-protos.py` script, then copy the resulting `listenfield_client` folder to your `site-packages` folder in the Python path.
