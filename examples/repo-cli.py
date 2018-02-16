@@ -210,6 +210,23 @@ def cropZoneQuery():
   else:
     print("No page token, so not making a second call")
 
+def personQuery():
+  print("Person query test:")
+  person_stub = catalog_grpc.PersonsStub(channel)
+  response = authenticatedCall(person_stub.Query, catalog.QueryPersonRequest(page_size=5))
+  page_token = None
+  for resp in response:
+    print("got:", resp)
+    if resp.HasField("queryMeta"):
+      page_token = resp.queryMeta.page_token
+  if page_token:
+    response = authenticatedCall(person_stub.Query, catalog.QueryPersonRequest(page_size=5, page_token=page_token))
+    print("******************************\nSecond call to Person query:")
+    for resp in response:
+      print("got:", resp)
+  else:
+    print("No page token, so not making a second call")
+
 
 ###############################################################################
 parser = argparse.ArgumentParser(description="Example code for ListenField repo API")

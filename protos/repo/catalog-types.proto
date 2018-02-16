@@ -158,3 +158,77 @@ message CropZone {
   string Owner = 4;
   repeated listenfield.repo.common.ContextItem ContextItems = 300;
 }
+
+
+message Person {
+  message Data {
+    string FirstName = 1;
+    string MiddleName = 2;
+    string LastName = 3;
+    string CombinedName = 4;
+    string ContactInfoId = 5;
+  }
+
+  string UUID = 1;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
+  Data data = 3;
+  string Owner = 4;
+  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+}
+
+
+message PersonRole {
+  message PersonRolesEnum {
+    enum Value {
+      Unspecified = 0;
+      Grower = 1;
+      MarketProvider = 2;
+      Customer = 3;
+      Operator = 4;
+      Owner = 5;
+      FarmManager = 6;
+      MarketAdvisor = 7;
+      EndUser = 8;
+      Financier = 9;
+      InsuranceAgent = 10;
+      GovernmentAgency = 11;
+      FixedAssetSupplier = 12;
+      MobileAssetSupplier = 13;
+      InputSupplier = 14;
+      IrrigationManager = 15;
+      CropAdvisor = 16;
+      CustomServiceProvider = 17;
+      Laborer = 18;
+      Transporter = 19;
+      DataServicesProvider = 20;
+      Authorizer = 21;
+    }
+  }
+  message Data {
+    string PersonId = 1;
+    string GrowerId = 2;
+    repeated string ActiveScopeIds = 3;
+    PersonRolesEnum.Value Role = 4;
+    string CompanyId = 5;
+  }
+
+  string UUID = 1;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
+  Data data = 3;
+  string Owner = 4;
+  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+}
+
+
+message Company {
+  message Data {
+    string Name = 1;
+    string ContactInfoId = 2;
+  }
+
+  string UUID = 1;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
+  Data data = 3;
+  string Owner = 4;
+  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+}
