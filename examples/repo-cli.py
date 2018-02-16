@@ -263,6 +263,7 @@ else:
       "fieldQuery",
       "fieldBoundaryQuery",
       "farmQuery",
+      "personQuery",
     ]
   for test_name in tests:
     tf = globals().get(test_name)
