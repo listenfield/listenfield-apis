@@ -22,22 +22,30 @@ message ContactInfo {
     string Number = 1;
     ContactTypeEnum.Value Type = 2;
   }
+  message Data {
+    string AddressLine1 = 1;
+    string AddressLine2 = 2;
+    string PoBoxNumber = 3;
+    string PostalCode = 4;
+    string City = 5;
+    string StateOrProvince = 6;
+    string Country = 7;
+    string CountryCode = 8;
+    repeated Contact Contacts = 9;
+    listenfield.repo.common.Location Location = 10;
+  }
 
-  string AddressLine1 = 1;
-  string AddressLine2 = 2;
-  string PoBoxNumber = 3;
-  string PostalCode = 4;
-  string City = 5;
-  string StateOrProvince = 6;
-  string Country = 7;
-  string CountryCode = 8;
-  repeated Contact Contacts = 9;
-  listenfield.repo.common.Location Location = 10;
+  string UUID = 1;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
+  Data data = 3;
+  string Owner = 4;
+  repeated listenfield.repo.common.ContextItem ContextItems = 300;
 }
 
 message Grower {
   message Data {
     string Name = 1;
+    string ContactInfoId = 2;
   }
 
   string UUID = 1;
@@ -51,7 +59,7 @@ message Farm {
   message Data {
     string Description = 1;
     string GrowerId = 2;
-    ContactInfo ContactInfo = 3;
+    string ContactInfoId = 3;
   }
 
   string UUID = 1;
