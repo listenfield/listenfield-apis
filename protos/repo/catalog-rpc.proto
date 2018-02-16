@@ -109,6 +109,7 @@ message QueryGrowerRequest {
   uint32 page_size = 1;
   string page_token = 2;
   string Name = 3;
+  string ContactInfoId = 4;
 }
 
 message QueryGrowerResult {
@@ -257,7 +258,7 @@ message QueryPersonRoleRequest {
   string page_token = 2;
   string PersonId = 3;
   string GrowerId = 4;
-  google.protobuf.Timestamp TimeStamp = 5;
+  google.protobuf.Timestamp TimeStamp = 5; // Not implemened
   listenfield.repo.catalog.PersonRole.PersonRolesEnum.Value Role = 6;
   string CompanyId = 7;
 }
