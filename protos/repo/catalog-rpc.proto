@@ -186,6 +186,34 @@ service CropZones {
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
 }
 
+message UpsertContactInfoRequest {
+  listenfield.repo.catalog.ContactInfo item = 1;
+}
+
+message UpsertContactInfoResult {
+  listenfield.repo.catalog.ContactInfo item = 1;
+}
+
+message QueryContactInfoRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+}
+
+message QueryContactInfoResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.ContactInfo item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service ContactInfos {
+  rpc Upsert (UpsertContactInfoRequest) returns (UpsertContactInfoResult);
+  rpc Query (QueryContactInfoRequest) returns (stream QueryContactInfoResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.ContactInfo);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
 message UpsertPersonRequest {
   listenfield.repo.catalog.Person item = 1;
 }
