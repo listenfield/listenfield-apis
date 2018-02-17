@@ -3,6 +3,7 @@ syntax = "proto3";
 package listenfield.repo;
 option csharp_namespace = "ListenField.Client.Repo";
 
+import "google/protobuf/timestamp.proto";
 import "repo/catalog-types.proto";
 import "api.proto";
 
@@ -108,6 +109,7 @@ message QueryGrowerRequest {
   uint32 page_size = 1;
   string page_token = 2;
   string Name = 3;
+  string ContactInfoId = 4;
 }
 
 message QueryGrowerResult {
@@ -181,6 +183,127 @@ service CropZones {
   rpc Upsert (UpsertCropZoneRequest) returns (UpsertCropZoneResult);
   rpc Query (QueryCropZoneRequest) returns (stream QueryCropZoneResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.CropZone);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertContactInfoRequest {
+  listenfield.repo.catalog.ContactInfo item = 1;
+}
+
+message UpsertContactInfoResult {
+  listenfield.repo.catalog.ContactInfo item = 1;
+}
+
+message QueryContactInfoRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+}
+
+message QueryContactInfoResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.ContactInfo item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service ContactInfos {
+  rpc Upsert (UpsertContactInfoRequest) returns (UpsertContactInfoResult);
+  rpc Query (QueryContactInfoRequest) returns (stream QueryContactInfoResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.ContactInfo);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertPersonRequest {
+  listenfield.repo.catalog.Person item = 1;
+}
+
+message UpsertPersonResult {
+  listenfield.repo.catalog.Person item = 1;
+}
+
+message QueryPersonRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string Name = 3;
+  string ContactInfoId = 4;
+}
+
+message QueryPersonResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.Person item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Persons {
+  rpc Upsert (UpsertPersonRequest) returns (UpsertPersonResult);
+  rpc Query (QueryPersonRequest) returns (stream QueryPersonResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Person);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertPersonRoleRequest {
+  listenfield.repo.catalog.PersonRole item = 1;
+}
+
+message UpsertPersonRoleResult {
+  listenfield.repo.catalog.PersonRole item = 1;
+}
+
+message QueryPersonRoleRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string PersonId = 3;
+  string GrowerId = 4;
+  google.protobuf.Timestamp TimeStamp = 5; // Not implemened
+  listenfield.repo.catalog.PersonRole.PersonRolesEnum.Value Role = 6;
+  string CompanyId = 7;
+}
+
+message QueryPersonRoleResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.PersonRole item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service PersonRoles {
+  rpc Upsert (UpsertPersonRoleRequest) returns (UpsertPersonRoleResult);
+  rpc Query (QueryPersonRoleRequest) returns (stream QueryPersonRoleResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.PersonRole);
+  rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
+  rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
+}
+
+message UpsertCompanyRequest {
+  listenfield.repo.catalog.Company item = 1;
+}
+
+message UpsertCompanyResult {
+  listenfield.repo.catalog.Company item = 1;
+}
+
+message QueryCompanyRequest {
+  uint32 page_size = 1;
+  string page_token = 2;
+  string Name = 3;
+  string ContactInfoId = 4;
+}
+
+message QueryCompanyResult {
+  oneof query_res_oneof {
+    listenfield.repo.catalog.Company item = 1;
+    listenfield.BatchedQueryMetadata queryMeta = 2;
+  }
+}
+
+service Companies {
+  rpc Upsert (UpsertCompanyRequest) returns (UpsertCompanyResult);
+  rpc Query (QueryCompanyRequest) returns (stream QueryCompanyResult);
+  rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Company);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
 }
