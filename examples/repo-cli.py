@@ -54,7 +54,7 @@ def echo():
 def timeScopeQuery():
   print("TimeScope query test:")
   timeScope_stub = common_grpc.TimeScopesStub(channel)
-  response = authenticatedCall(timeScope_stub.Query, common.QueryTimeScopeRequest())
+  response = authenticatedCall(timeScope_stub.Query, api.BatchedQueryRequest())
   global timeScopeId
   for resp in response:
     if (timeScopeId is None and resp.item.UUID): timeScopeId = resp.item.UUID
@@ -111,14 +111,14 @@ def timeScopeSetACL():
 def farmQuery():
   print("Farm query test:")
   farm_stub = catalog_grpc.FarmsStub(channel)
-  response = authenticatedCall(farm_stub.Query, catalog.QueryFarmRequest(page_size=5))
+  response = authenticatedCall(farm_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(farm_stub.Query, catalog.QueryFarmRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(farm_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to Farm query:")
     for resp in response:
       print("got:", resp)
@@ -128,14 +128,14 @@ def farmQuery():
 def fieldBoundaryQuery():
   print("FieldBoundary query test:")
   fieldBoundary_stub = catalog_grpc.FieldBoundariesStub(channel)
-  response = authenticatedCall(fieldBoundary_stub.Query, catalog.QueryFieldBoundaryRequest(page_size=5))
+  response = authenticatedCall(fieldBoundary_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(fieldBoundary_stub.Query, catalog.QueryFieldBoundaryRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(fieldBoundary_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to FieldBoundary query:")
     for resp in response:
       print("got:", resp)
@@ -145,14 +145,14 @@ def fieldBoundaryQuery():
 def fieldQuery():
   print("Field query test:")
   field_stub = catalog_grpc.FieldsStub(channel)
-  response = authenticatedCall(field_stub.Query, catalog.QueryFieldRequest(page_size=5))
+  response = authenticatedCall(field_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(field_stub.Query, catalog.QueryFieldRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(field_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to Field query:")
     for resp in response:
       print("got:", resp)
@@ -162,14 +162,14 @@ def fieldQuery():
 def growerQuery():
   print("Grower query test:")
   grower_stub = catalog_grpc.GrowersStub(channel)
-  response = authenticatedCall(grower_stub.Query, catalog.QueryGrowerRequest(page_size=5))
+  response = authenticatedCall(grower_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(grower_stub.Query, catalog.QueryGrowerRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(grower_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to Grower query:")
     for resp in response:
       print("got:", resp)
@@ -179,14 +179,14 @@ def growerQuery():
 def cropQuery():
   print("Crop query test:")
   crop_stub = catalog_grpc.CropsStub(channel)
-  response = authenticatedCall(crop_stub.Query, catalog.QueryCropRequest(page_size=5))
+  response = authenticatedCall(crop_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(crop_stub.Query, catalog.QueryCropRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(crop_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to Crop query:")
     for resp in response:
       print("got:", resp)
@@ -196,14 +196,14 @@ def cropQuery():
 def cropZoneQuery():
   print("CropZone query test:")
   cropZone_stub = catalog_grpc.CropZonesStub(channel)
-  response = authenticatedCall(cropZone_stub.Query, catalog.QueryCropZoneRequest(page_size=5))
+  response = authenticatedCall(cropZone_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(cropZone_stub.Query, catalog.QueryCropZoneRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(cropZone_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to CropZone query:")
     for resp in response:
       print("got:", resp)
@@ -213,14 +213,14 @@ def cropZoneQuery():
 def personQuery():
   print("Person query test:")
   person_stub = catalog_grpc.PersonsStub(channel)
-  response = authenticatedCall(person_stub.Query, catalog.QueryPersonRequest(page_size=5))
+  response = authenticatedCall(person_stub.Query, api.BatchedQueryRequest(page_size=5))
   page_token = None
   for resp in response:
     print("got:", resp)
     if resp.HasField("queryMeta"):
       page_token = resp.queryMeta.page_token
   if page_token:
-    response = authenticatedCall(person_stub.Query, catalog.QueryPersonRequest(page_size=5, page_token=page_token))
+    response = authenticatedCall(person_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
     print("******************************\nSecond call to Person query:")
     for resp in response:
       print("got:", resp)

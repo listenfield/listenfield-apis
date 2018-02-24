@@ -8,6 +8,19 @@ message EchoMessage {
   string message = 1;
 }
 
+message SortCriterium {
+  string field = 1;
+  bool descending = 2;
+}
+
+message BatchedQueryRequest {
+  string search = 1; // full-text
+  string filter = 2; // json — in the format expected by MongoDB or CouchDB Find (Mango)
+  repeated SortCriterium sort = 3;
+  uint32 page_size = 4; // defaults to 20
+  string page_token = 5; // opaque — implementation can use it however is appropriate
+}
+
 message BatchedQueryMetadata {
   string page_token = 2;
   uint32 count = 3;

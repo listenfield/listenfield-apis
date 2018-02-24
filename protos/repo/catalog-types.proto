@@ -10,178 +10,174 @@ option csharp_namespace = "ListenField.Client.Repo";
 import "repo/common-types.proto";
 
 message ContactInfo {
-  message ContactTypeEnum {
+  message ContactLineTypeEnum {
     enum Value {
       FixedPhone = 0;
       MobilePhone = 1;
       Fax = 2;
       Email = 3;
+      InstantMessaging = 100;
+      URL = 101;
+      SocialProfile = 102; // use annotation field for the service name e.g. Twitter, LinkedIn
     }
   }
-  message Contact {
-    string Number = 1;
-    ContactTypeEnum.Value Type = 2;
+  message ContactLine {
+    string identifier = 1;
+    ContactLineTypeEnum.Value type = 2;
+    string annotation = 3; // e.g. home, office
   }
   message Data {
-    string AddressLine1 = 1;
-    string AddressLine2 = 2;
-    string PoBoxNumber = 3;
-    string PostalCode = 4;
-    string City = 5;
-    string StateOrProvince = 6;
-    string Country = 7;
-    string CountryCode = 8;
-    repeated Contact Contacts = 9;
-    listenfield.repo.common.Location Location = 10;
+    string addressLine1 = 1;
+    string addressLine2 = 2;
+    string poBoxNumber = 3;
+    string postalCode = 4;
+    string city = 5;
+    string stateOrProvince = 6;
+    string country = 7;
+    string countryCode = 8;
+    repeated ContactLine contactLines = 9;
+    listenfield.repo.common.Location location = 10;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 message Grower {
   message Data {
-    string Name = 1;
-    string ContactInfoId = 2;
+    string name = 1;
+    string contactInfoId = 2;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 message Farm {
   message Data {
-    string Description = 1;
-    string GrowerId = 2;
-    string ContactInfoId = 3;
+    string description = 1;
+    string growerId = 2;
+    string contactInfoId = 3;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
 message FieldBoundary {
   message InteriorBoundaryAttribute {
-    uint32 ShapeIdRef = 1;
-    bool IsPassable = 2;
-    string Description = 3;
+    uint32 shapeIdRef = 1;
+    bool isPassable = 2;
+    string description = 3;
   }
 
   message DrivenHeadland {
-    string Description = 1;
-    listenfield.repo.common.MultiPolygon SpatialData = 2;
+    string description = 1;
+    listenfield.repo.common.MultiPolygon spatialData = 2;
   }
 
   message ConstantOffsetHeadland {
-    string Description = 1;
-    listenfield.repo.common.NumericRepresentationValue Value = 2;
+    string description = 1;
+    listenfield.repo.common.NumericRepresentationValue value = 2;
   }
 
   message Data {
-    string Description = 1;
-    string FieldId = 2;
-    listenfield.repo.common.MultiPolygon SpatialData = 3;
-    repeated string TimeScopeIds = 4;
+    string description = 1;
+    string fieldId = 2;
+    listenfield.repo.common.MultiPolygon spatialData = 3;
+    repeated string timeScopeIds = 4;
     oneof Headland {
-      DrivenHeadland DrivenHeadland = 101;
-      ConstantOffsetHeadland ConstantOffsetHeadland = 102;
+      DrivenHeadland drivenHeadland = 101;
+      ConstantOffsetHeadland constantOffsetHeadland = 102;
     }
-    listenfield.repo.common.GpsSource BoundarySource = 6;
-    string OriginalEpsgCode = 7;
-    repeated InteriorBoundaryAttribute InteriorBoundaryAttributes = 8;
+    listenfield.repo.common.GpsSource boundarySource = 6;
+    string originalEpsgCode = 7;
+    repeated InteriorBoundaryAttribute interiorBoundaryAttributes = 8;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
 message Field {
   message Data {
-    string Description = 1;
-    string FarmId = 2;
-    listenfield.repo.common.NumericRepresentationValue Area = 3;
-    repeated string TimeScopeIds = 4;
-    string ActiveBoundaryId = 5;
-    listenfield.repo.common.NumericRepresentationValue Slope = 6;
-    listenfield.repo.common.NumericRepresentationValue Aspect = 7;
-    listenfield.repo.common.NumericRepresentationValue SlopeLength = 8;
-    repeated string GuidanceGroupIds = 9;
+    string description = 1;
+    string farmId = 2;
+    listenfield.repo.common.NumericRepresentationValue area = 3;
+    repeated string timeScopeIds = 4;
+    string activeBoundaryId = 5;
+    listenfield.repo.common.NumericRepresentationValue slope = 6;
+    listenfield.repo.common.NumericRepresentationValue aspect = 7;
+    listenfield.repo.common.NumericRepresentationValue slopeLength = 8;
+    repeated string guidanceGroupIds = 9;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
 message Crop {
   message Data {
-    string Name = 1;
+    string name = 1;
     // leaving this as it's in the docs, but what does it link to?
-    string ParentId = 2;
-    listenfield.repo.common.NumericRepresentationValue ReferenceWeight = 3;
-    listenfield.repo.common.NumericRepresentationValue StandardPayableMoisture = 4;
+    string parentId = 2;
+    listenfield.repo.common.NumericRepresentationValue referenceWeight = 3;
+    listenfield.repo.common.NumericRepresentationValue standardPayableMoisture = 4;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
 message CropZone {
   message Data {
-    repeated string TimeScopeIds = 1;
-    string Description = 2;
-    string FieldId = 3;
-    string CropId = 4;
-    listenfield.repo.common.NumericRepresentationValue Area = 5;
-    listenfield.repo.common.MultiPolygon BoundingRegion = 6;
-    listenfield.repo.common.GpsSource BoundarySource = 7;
-    repeated string NoteIds = 8;
-    repeated string GuidanceGroupIds = 9;
+    repeated string timeScopeIds = 1;
+    string description = 2;
+    string fieldId = 3;
+    string cropId = 4;
+    listenfield.repo.common.NumericRepresentationValue area = 5;
+    listenfield.repo.common.MultiPolygon boundingRegion = 6;
+    listenfield.repo.common.GpsSource boundarySource = 7;
+    repeated string noteIds = 8;
+    repeated string guidanceGroupIds = 9;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
 message Person {
   message Data {
-    string FirstName = 1;
-    string MiddleName = 2;
-    string LastName = 3;
-    string CombinedName = 4;
-    string ContactInfoId = 5;
+    string firstName = 1;
+    string middleName = 2;
+    string lastName = 3;
+    string combinedName = 4;
+    string contactInfoId = 5;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
@@ -213,30 +209,28 @@ message PersonRole {
     }
   }
   message Data {
-    string PersonId = 1;
-    string GrowerId = 2;
-    repeated string ActiveScopeIds = 3;
-    PersonRolesEnum.Value Role = 4;
-    string CompanyId = 5;
+    string personId = 1;
+    string growerId = 2;
+    repeated string activeScopeIds = 3;
+    PersonRolesEnum.Value role = 4;
+    string companyId = 5;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }
 
 
 message Company {
   message Data {
-    string Name = 1;
-    string ContactInfoId = 2;
+    string name = 1;
+    string contactInfoId = 2;
   }
 
-  string UUID = 1;
-  repeated listenfield.repo.common.CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated listenfield.repo.common.ContextItem ContextItems = 300;
+  repeated listenfield.repo.common.CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated listenfield.repo.common.ContextItem contextItems = 300;
 }

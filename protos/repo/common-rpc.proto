@@ -14,11 +14,6 @@ message UpsertTimeScopeResult {
   listenfield.repo.common.TimeScope item = 1;
 }
 
-message QueryTimeScopeRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-}
-
 message QueryTimeScopeResult {
   oneof query_res_oneof {
     listenfield.repo.common.TimeScope item = 1;
@@ -32,7 +27,7 @@ service Test {
 
 service TimeScopes {
   rpc Upsert (UpsertTimeScopeRequest) returns (UpsertTimeScopeResult);
-  rpc Query (QueryTimeScopeRequest) returns (stream QueryTimeScopeResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryTimeScopeResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.common.TimeScope);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);

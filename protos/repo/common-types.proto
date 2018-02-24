@@ -29,14 +29,14 @@ message CompoundIdentifier {
     }
   }
   message UniqueId {
-    string Id = 1;
-    CompoundIdentifierTypeEnum.Value CIType = 2;
-    string Source = 3;
-    IdSourceTypeEnum.Value SourceType = 4;
+    string id = 1;
+    CompoundIdentifierTypeEnum.Value identifierType = 2;
+    string source = 3;
+    IdSourceTypeEnum.Value sourceType = 4;
   }
 
-  string UUID = 1;
-  repeated UniqueId UniqueIds = 2;
+  string uuid = 1;
+  repeated UniqueId uniqueIds = 2;
 }
 
 // We don't actually expose Representations, UnitOfMeasures, etc by the API,
@@ -44,36 +44,36 @@ message CompoundIdentifier {
 // has the latest XML from ADAPT, or doesn't care.
 
 message NumericValue {
-  double Value = 1;
-  string UnitOfMeasureId = 2;
+  double value = 1;
+  string unitOfMeasureId = 2;
 }
 
 message NumericRepresentationValue {
-  string RepresentationId = 1;
-  NumericValue Value = 2;
-  string UnitOfMeasureId = 3;
+  string representationId = 1;
+  NumericValue value = 2;
+  string unitOfMeasureId = 3;
 }
 
 message StringRepresentationValue {
-  string RepresentationId = 1;
-  string Value = 2;
-  string UnitOfMeasureId = 3;
+  string representationId = 1;
+  string value = 2;
+  string unitOfMeasureId = 3;
 }
 
 message EnumeratedRepresentationValue {
-  string RepresentationId = 1;
-  string Value = 2;
-  string UnitOfMeasureId = 3;
+  string representationId = 1;
+  string value = 2;
+  string unitOfMeasureId = 3;
 }
 
 message ContextItem {
-  string ContextItemType = 1; // DomainID for a Representation
+  string contextItemType = 1; // DomainID for a Representation
   oneof representation_value {
-    NumericRepresentationValue NumericRepresentationValue = 2;
-    StringRepresentationValue StringRepresentationValue = 3;
-    EnumeratedRepresentationValue EnumeratedRepresentationValue = 4;
+    NumericRepresentationValue numericRepresentationValue = 2;
+    StringRepresentationValue stringRepresentationValue = 3;
+    EnumeratedRepresentationValue enumeratedRepresentationValue = 4;
   }
-  repeated ContextItem ContextItems = 5;
+  repeated ContextItem contextItems = 5;
 }
 
 message TimeScope {
@@ -105,20 +105,19 @@ message TimeScope {
   }
 
   message Data {
-    string Description = 1;
-    DateContextEnum.Value DateContext = 2;
-    google.protobuf.Timestamp TimeStamp1 = 3;
-    google.protobuf.Timestamp TimeStamp2 = 4;
-    Location Location1 = 5;
-    Location Location2 = 6;
-    google.protobuf.Duration Duration = 7;
+    string description = 1;
+    DateContextEnum.Value dateContext = 2;
+    google.protobuf.Timestamp timeStamp1 = 3;
+    google.protobuf.Timestamp timeStamp2 = 4;
+    Location location1 = 5;
+    Location location2 = 6;
+    google.protobuf.Duration duration = 7;
   }
 
-  string UUID = 1;
-  repeated CompoundIdentifier.UniqueId Ids = 2;
-  Data data = 3;
-  string Owner = 4;
-  repeated ContextItem ContextItems = 300;
+  repeated CompoundIdentifier.UniqueId ids = 1;
+  Data data = 2;
+  string owner = 3;
+  repeated ContextItem contextItems = 300;
 }
 
 message Point {
@@ -149,12 +148,12 @@ message GpsSource {
     Other = 17;
   }
 
-  GpsSourceEnum SourceType = 1;
-  NumericRepresentationValue EstimatedPrecision = 2;
-  NumericRepresentationValue HorizontalAccuracy = 3;
-  NumericRepresentationValue VerticalAccuracy = 4;
-  uint32 NumberOfSatellites = 5;
-  string GpsUtcTime = 6;
+  GpsSourceEnum sourceType = 1;
+  NumericRepresentationValue estimatedPrecision = 2;
+  NumericRepresentationValue horizontalAccuracy = 3;
+  NumericRepresentationValue verticalAccuracy = 4;
+  uint32 numberOfSatellites = 5;
+  string gpsUTCTime = 6;
 }
 
 message ShapeTypeEnum {
@@ -171,19 +170,19 @@ message ShapeTypeEnum {
 }
 
 message LinearRing {
-  repeated Point Points = 1;
+  repeated Point points = 1;
 }
 
 message Polygon {
-  LinearRing ExteriorRing = 1;
-  repeated LinearRing InteriorRings = 2;
+  LinearRing exteriorRing = 1;
+  repeated LinearRing interiorRings = 2;
 }
 
 message MultiPolygon {
-  repeated Polygon Polygons = 1;
+  repeated Polygon polygons = 1;
 }
 
 message Location {
   Point position = 1;
-  GpsSource GpsSource = 2;
+  GpsSource gpsSource = 2;
 }

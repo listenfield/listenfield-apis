@@ -15,13 +15,6 @@ message UpsertFieldBoundaryResult {
   listenfield.repo.catalog.FieldBoundary item = 1;
 }
 
-message QueryFieldBoundaryRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string GrowerId = 3;
-  repeated string TimeScopeIds = 4;
-}
-
 message QueryFieldBoundaryResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.FieldBoundary item = 1;
@@ -31,7 +24,7 @@ message QueryFieldBoundaryResult {
 
 service FieldBoundaries {
   rpc Upsert (UpsertFieldBoundaryRequest) returns (UpsertFieldBoundaryResult);
-  rpc Query (QueryFieldBoundaryRequest) returns (stream QueryFieldBoundaryResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryFieldBoundaryResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.FieldBoundary);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -45,14 +38,6 @@ message UpsertFieldResult {
   listenfield.repo.catalog.Field item = 1;
 }
 
-message QueryFieldRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string FarmId = 3;
-  string FieldBoundaryId = 4;
-  repeated string TimeScopeIds = 5;
-}
-
 message QueryFieldResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.Field item = 1;
@@ -62,7 +47,7 @@ message QueryFieldResult {
 
 service Fields {
   rpc Upsert (UpsertFieldRequest) returns (UpsertFieldResult);
-  rpc Query (QueryFieldRequest) returns (stream QueryFieldResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryFieldResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Field);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -76,12 +61,6 @@ message UpsertFarmResult {
   listenfield.repo.catalog.Farm item = 1;
 }
 
-message QueryFarmRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string GrowerId = 3;
-}
-
 message QueryFarmResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.Farm item = 1;
@@ -91,7 +70,7 @@ message QueryFarmResult {
 
 service Farms {
   rpc Upsert (UpsertFarmRequest) returns (UpsertFarmResult);
-  rpc Query (QueryFarmRequest) returns (stream QueryFarmResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryFarmResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Farm);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -105,13 +84,6 @@ message UpsertGrowerResult {
   listenfield.repo.catalog.Grower item = 1;
 }
 
-message QueryGrowerRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string Name = 3;
-  string ContactInfoId = 4;
-}
-
 message QueryGrowerResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.Grower item = 1;
@@ -121,7 +93,7 @@ message QueryGrowerResult {
 
 service Growers {
   rpc Upsert (UpsertGrowerRequest) returns (UpsertGrowerResult);
-  rpc Query (QueryGrowerRequest) returns (stream QueryGrowerResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryGrowerResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Grower);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -135,12 +107,6 @@ message UpsertCropResult {
   listenfield.repo.catalog.Crop item = 1;
 }
 
-message QueryCropRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string Name = 3;
-}
-
 message QueryCropResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.Crop item = 1;
@@ -150,7 +116,7 @@ message QueryCropResult {
 
 service Crops {
   rpc Upsert (UpsertCropRequest) returns (UpsertCropResult);
-  rpc Query (QueryCropRequest) returns (stream QueryCropResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryCropResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Crop);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -164,14 +130,6 @@ message UpsertCropZoneResult {
   listenfield.repo.catalog.CropZone item = 1;
 }
 
-message QueryCropZoneRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string FieldId = 3;
-  string CropId = 4;
-  repeated string TimeScopeIds = 5;
-}
-
 message QueryCropZoneResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.CropZone item = 1;
@@ -181,7 +139,7 @@ message QueryCropZoneResult {
 
 service CropZones {
   rpc Upsert (UpsertCropZoneRequest) returns (UpsertCropZoneResult);
-  rpc Query (QueryCropZoneRequest) returns (stream QueryCropZoneResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryCropZoneResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.CropZone);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -195,11 +153,6 @@ message UpsertContactInfoResult {
   listenfield.repo.catalog.ContactInfo item = 1;
 }
 
-message QueryContactInfoRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-}
-
 message QueryContactInfoResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.ContactInfo item = 1;
@@ -209,7 +162,7 @@ message QueryContactInfoResult {
 
 service ContactInfos {
   rpc Upsert (UpsertContactInfoRequest) returns (UpsertContactInfoResult);
-  rpc Query (QueryContactInfoRequest) returns (stream QueryContactInfoResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryContactInfoResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.ContactInfo);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -223,13 +176,6 @@ message UpsertPersonResult {
   listenfield.repo.catalog.Person item = 1;
 }
 
-message QueryPersonRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string Name = 3;
-  string ContactInfoId = 4;
-}
-
 message QueryPersonResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.Person item = 1;
@@ -239,7 +185,7 @@ message QueryPersonResult {
 
 service Persons {
   rpc Upsert (UpsertPersonRequest) returns (UpsertPersonResult);
-  rpc Query (QueryPersonRequest) returns (stream QueryPersonResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryPersonResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Person);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -272,7 +218,7 @@ message QueryPersonRoleResult {
 
 service PersonRoles {
   rpc Upsert (UpsertPersonRoleRequest) returns (UpsertPersonRoleResult);
-  rpc Query (QueryPersonRoleRequest) returns (stream QueryPersonRoleResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryPersonRoleResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.PersonRole);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
@@ -286,13 +232,6 @@ message UpsertCompanyResult {
   listenfield.repo.catalog.Company item = 1;
 }
 
-message QueryCompanyRequest {
-  uint32 page_size = 1;
-  string page_token = 2;
-  string Name = 3;
-  string ContactInfoId = 4;
-}
-
 message QueryCompanyResult {
   oneof query_res_oneof {
     listenfield.repo.catalog.Company item = 1;
@@ -302,7 +241,7 @@ message QueryCompanyResult {
 
 service Companies {
   rpc Upsert (UpsertCompanyRequest) returns (UpsertCompanyResult);
-  rpc Query (QueryCompanyRequest) returns (stream QueryCompanyResult);
+  rpc Query (listenfield.BatchedQueryRequest) returns (stream QueryCompanyResult);
   rpc Get (listenfield.SimpleGetRequest) returns (listenfield.repo.catalog.Company);
   rpc GetACL (listenfield.SimpleGetRequest) returns (listenfield.GrantList);
   rpc SetACL (listenfield.ChangeGrantsRequest) returns (stream listenfield.ChangeGrantsResult);
