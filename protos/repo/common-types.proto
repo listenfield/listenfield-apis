@@ -121,9 +121,9 @@ message TimeScope {
 }
 
 message Point {
-  double X = 1;
-  double Y = 2;
-  double Z = 3;
+  double x = 1;
+  double y = 2;
+  double z = 3;
 }
 
 message GpsSource {
