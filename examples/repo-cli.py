@@ -57,7 +57,7 @@ def timeScopeQuery():
   response = authenticatedCall(timeScope_stub.Query, api.BatchedQueryRequest())
   global timeScopeId
   for resp in response:
-    if (timeScopeId is None and resp.item.uuid): timeScopeId = resp.item.uuid
+    if (timeScopeId is None and resp.item.ids.uuid): timeScopeId = resp.item.ids.uuid
     print("got:", resp)
 
 def timeScopeInsert():
@@ -71,7 +71,7 @@ def timeScopeInsert():
   )))
   print(response)
   global timeScopeId
-  if (timeScopeId is None): timeScopeId = response.item.uuid
+  if (timeScopeId is None): timeScopeId = response.item.ids.uuid
 
 def timeScopeGet():
   if (timeScopeId is None):
