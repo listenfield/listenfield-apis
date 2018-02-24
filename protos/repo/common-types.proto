@@ -114,7 +114,7 @@ message TimeScope {
     google.protobuf.Duration duration = 7;
   }
 
-  repeated CompoundIdentifier.UniqueId ids = 1;
+  CompoundIdentifier ids = 1;
   Data data = 2;
   string owner = 3;
   repeated ContextItem contextItems = 300;

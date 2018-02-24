@@ -52,13 +52,13 @@ message GrantList {
 }
 
 message ChangeGrantsRequest {
-  repeated string UUIDs = 1;
+  repeated string uuids = 1;
   repeated Grant add = 2;
   repeated Grant remove = 3;
 }
 
 message ChangeGrantsResult {
-  string UUID = 1;
+  string uuid = 1;
   repeated Grant grants = 2;
   google.rpc.Status error = 3;
 }
