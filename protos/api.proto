@@ -28,7 +28,7 @@ message BatchedQueryMetadata {
 }
 
 message SimpleGetRequest {
-  string UUID = 1;
+  string uuid = 1;
 }
 
 message Grant {

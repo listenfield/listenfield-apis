@@ -19,7 +19,7 @@ from listenfield_client.repo import catalog_rpc_grpc as catalog_grpc
 from listenfield_client.repo import common_types
 
 timeScopeId = None
-testAdminUUID = "6cade40b-1a35-4469-bbf8-3daaf223157e"
+testAdminuuid = "6cade40b-1a35-4469-bbf8-3daaf223157e"
 session_file = "session.json" # overriden by command line, see below
 
 # Since this script is a developer tool, we'll just trust any exceptions it
@@ -57,7 +57,7 @@ def timeScopeQuery():
   response = authenticatedCall(timeScope_stub.Query, api.BatchedQueryRequest())
   global timeScopeId
   for resp in response:
-    if (timeScopeId is None and resp.item.UUID): timeScopeId = resp.item.UUID
+    if (timeScopeId is None and resp.item.uuid): timeScopeId = resp.item.uuid
     print("got:", resp)
 
 def timeScopeInsert():
@@ -71,20 +71,20 @@ def timeScopeInsert():
   )))
   print(response)
   global timeScopeId
-  if (timeScopeId is None): timeScopeId = response.item.UUID
+  if (timeScopeId is None): timeScopeId = response.item.uuid
 
 def timeScopeGet():
   if (timeScopeId is None):
     raise RuntimeError("Can't call timeScopeGet() before some other test that gets an ID (such as insert, query)")
   print("TimeScope get ({}):".format(timeScopeId))
   timeScope_stub = common_grpc.TimeScopesStub(channel)
-  response = authenticatedCall(timeScope_stub.Get, api.SimpleGetRequest(UUID=timeScopeId))
+  response = authenticatedCall(timeScope_stub.Get, api.SimpleGetRequest(uuid=timeScopeId))
   print(response)
 
 def timeScopeGetInvalid():
   print("TimeScope get (invalid id):")
   timeScope_stub = common_grpc.TimeScopesStub(channel)
-  response = authenticatedCall(timeScope_stub.Get, api.SimpleGetRequest(UUID="fnord"))
+  response = authenticatedCall(timeScope_stub.Get, api.SimpleGetRequest(uuid="fnord"))
   print(response)
 
 def timeScopeGetACL():
@@ -92,7 +92,7 @@ def timeScopeGetACL():
     raise RuntimeError("Can't call timeScopeGetACL() before some other test that gets an ID (such as insert, query)")
   print("TimeScope getACL ({}):".format(timeScopeId))
   timeScope_stub = common_grpc.TimeScopesStub(channel)
-  response = authenticatedCall(timeScope_stub.GetACL, api.SimpleGetRequest(UUID=timeScopeId))
+  response = authenticatedCall(timeScope_stub.GetACL, api.SimpleGetRequest(uuid=timeScopeId))
   print(response)
 
 def timeScopeSetACL():
@@ -101,8 +101,8 @@ def timeScopeSetACL():
   print("TimeScope setACL ({}):".format(timeScopeId))
   timeScope_stub = common_grpc.TimeScopesStub(channel)
   response = authenticatedCall(timeScope_stub.SetACL, api.ChangeGrantsRequest(
-    UUIDs=[timeScopeId],
-    add=[api.Grant(grantee=testAdminUUID, type=api.Grant.TypeEnum.read)],
+    uuids=[timeScopeId],
+    add=[api.Grant(grantee=testAdminuuid, type=api.Grant.TypeEnum.read)],
     remove=[api.Grant(grantee="PUBLIC", type=api.Grant.TypeEnum.read)],
   ))
   for resp in response:
