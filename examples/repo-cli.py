@@ -10,6 +10,7 @@ try:
   from jose import jwt, exceptions as jose
 except:
   jose = None
+from uuid import uuid4
 
 from listenfield_client import api
 from listenfield_client.repo import common_rpc as common
@@ -65,8 +66,22 @@ def timeScopeInsert():
   timeScope_stub = common_grpc.TimeScopesStub(channel)
   response = authenticatedCall(timeScope_stub.Upsert, common.UpsertTimeScopeRequest(item=common_types.TimeScope(
     data=common_types.TimeScope.Data(
-      Description="2018",
-      DateContext=common_types.TimeScope.DateContextEnum.CropSeason,
+      description="2018",
+      dateContext=common_types.TimeScope.DateContextEnum.CropSeason,
+    )
+  )))
+  print(response)
+  global timeScopeId
+  if (timeScopeId is None): timeScopeId = response.item.ids.uuid
+
+def timeScopeInsertWithId():
+  print("TimeScope insert:")
+  timeScope_stub = common_grpc.TimeScopesStub(channel)
+  response = authenticatedCall(timeScope_stub.Upsert, common.UpsertTimeScopeRequest(item=common_types.TimeScope(
+    ids=common_types.CompoundIdentifier(uuid=str(uuid4())),
+    data=common_types.TimeScope.Data(
+      description="2018",
+      dateContext=common_types.TimeScope.DateContextEnum.CropSeason,
     )
   )))
   print(response)
@@ -85,6 +100,16 @@ def timeScopeGetInvalid():
   print("TimeScope get (invalid id):")
   timeScope_stub = common_grpc.TimeScopesStub(channel)
   response = authenticatedCall(timeScope_stub.Get, api.SimpleGetRequest(uuid="fnord"))
+  print(response)
+
+def timeScopeUpdate():
+  if (timeScopeId is None):
+    raise RuntimeError("Can't call timeScopeUpdate() before some other test that gets an ID (such as insert, query)")
+  print("TimeScope update ({}):".format(timeScopeId))
+  timeScope_stub = common_grpc.TimeScopesStub(channel)
+  item = authenticatedCall(timeScope_stub.Get, api.SimpleGetRequest(uuid=timeScopeId))
+  item.data.description += " (updated)"
+  response = authenticatedCall(timeScope_stub.Upsert, common.UpsertTimeScopeRequest(item=item))
   print(response)
 
 def timeScopeGetACL():
@@ -112,6 +137,23 @@ def farmQuery():
   print("Farm query test:")
   farm_stub = catalog_grpc.FarmsStub(channel)
   response = authenticatedCall(farm_stub.Query, api.BatchedQueryRequest(page_size=5))
+  page_token = None
+  for resp in response:
+    print("got:", resp)
+    if resp.HasField("queryMeta"):
+      page_token = resp.queryMeta.page_token
+  if page_token:
+    response = authenticatedCall(farm_stub.Query, api.BatchedQueryRequest(page_size=5, page_token=page_token))
+    print("******************************\nSecond call to Farm query:")
+    for resp in response:
+      print("got:", resp)
+  else:
+    print("No page token, so not making a second call")
+
+def farmSearch():
+  print("Farm query test:")
+  farm_stub = catalog_grpc.FarmsStub(channel)
+  response = authenticatedCall(farm_stub.Query, api.BatchedQueryRequest(page_size=5, search=args.search_term or "Pond*"))
   page_token = None
   for resp in response:
     print("got:", resp)
@@ -234,6 +276,8 @@ parser.add_argument("--endpoint_url", "-u")
 parser.add_argument("--session_file", "-f")
 parser.add_argument("--trusted_certs")
 parser.add_argument("--insecure")
+parser.add_argument("--stop_on_error")
+parser.add_argument("--search_term")
 parser.add_argument("tests", nargs="*")
 parser.set_defaults(endpoint_url="u.listenfield.com", session_file="session.json")
 
@@ -271,7 +315,7 @@ else:
       try:
         tf()
       except (SystemExit, KeyboardInterrupt):
-        pass
+        if args.stop_on_error: break
       except Exception as e:
         print("Error:")
         import traceback
@@ -282,3 +326,4 @@ else:
         if hasattr(e, "initial_metadata"): print("metadata:", e.initial_metadata())
         if hasattr(e, "trailing_metadata"): print("trailers:", e.trailing_metadata())
         print()
+        if args.stop_on_error: break
