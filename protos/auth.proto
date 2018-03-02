@@ -6,10 +6,11 @@ package listenfield.auth;
 import "api.proto";
 
 message LoginWithPasswordRequest {
-  string Username = 1;
-  string Password = 2;
-  string MFACode = 3;
-  map<string, string> ChallengeData = 4;
+  string username = 1;
+  string password = 2;
+  string mfaCode = 3;
+  map<string, string> challengeData = 4;
+  string continuationToken = 5;
 }
 
 message LoginChallenge {
@@ -21,16 +22,17 @@ message LoginChallenge {
     }
   }
 
-  ChallengeTypeEnum.Value Type = 1;
-  map<string, string> Data = 2;
+  ChallengeTypeEnum.Value type = 1;
+  map<string, string> data = 2;
+  string continuationToken = 5;
 }
 
 message SessionInfo {
-  string AccessToken = 1;
-  string Username = 2;
-  string TokenType = 3;
-  string RefreshToken = 4;
-  string IdToken = 5;
+  string accessToken = 1;
+  string username = 2;
+  string tokenType = 3;
+  string refreshToken = 4;
+  string idToken = 5;
 }
 
 message LoginResult {
@@ -41,8 +43,8 @@ message LoginResult {
 }
 
 message RefreshRequest {
-  string RefreshToken = 1;
-  string Username = 2;
+  string refreshToken = 1;
+  string username = 2;
 }
 
 service Test {
