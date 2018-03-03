@@ -279,7 +279,7 @@ parser.add_argument("--insecure")
 parser.add_argument("--stop_on_error")
 parser.add_argument("--search_term")
 parser.add_argument("tests", nargs="*")
-parser.set_defaults(endpoint_url="u.listenfield.com", session_file="session.json")
+parser.set_defaults(endpoint_url="api.listenfield.com", session_file="session.json")
 
 args = parser.parse_args()
 if args.insecure:

@@ -63,7 +63,7 @@ parser.add_argument("--endpoint_url", "-u")
 parser.add_argument("--session_file", "-f")
 parser.add_argument("--trusted_certs")
 parser.add_argument("--insecure")
-parser.set_defaults(endpoint_url="u.listenfield.com", session_file="session.json")
+parser.set_defaults(endpoint_url="api.listenfield.com", session_file="session.json")
 
 subparsers = parser.add_subparsers(help="sub-command help")
 
