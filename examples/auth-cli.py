@@ -32,73 +32,29 @@ def login(channel, config):
     config.password = getpass.getpass()
 
   auth_stub = auth_grpc.AuthenticationStub(channel)
-  def gen():
-    global running
-    running += 1
-    yield auth.LoginWithPasswordRequest(Username=config.username, Password=config.password)
-    while True:
-      try:
-        res = stream.__next__()
-      except StopIteration:
-        print("End of responses")
-        running -= 1
-        break
-      except:
-        print("Error in streaming")
-        import traceback; traceback.print_exc()
-        running -= 1
-        sys.exit(1)
-      print(res)
-      if not res.HasField("challenge"):
-        with open(config.session_file, "w") as f:
-          json.dump({
-            "AccessToken": res.session.AccessToken,
-            "Username": res.session.Username,
-            "TokenType": res.session.TokenType,
-            "RefreshToken": res.session.RefreshToken,
-            "IdToken": res.session.IdToken,
-          }, f)
-        running -= 1
-        raise StopIteration()
-      elif res.challenge.Type == auth.LoginChallenge.ChallengeTypeEnum.NEW_PASSWORD:
-        requiredAttributes = res.challenge.Data.get("requiredAttributes")
-        if requiredAttributes and len(requiredAttributes) > 2:
-          requiredAttributes = json.loads(requiredAttributes)
-          print("The server requires you to update your password and some information")
-        else:
-          requiredAttributes = []
-          print("The server requires you to update your password")
-        import getpass
-        new_password = None
-        confirm = None
-        while True:
-          new_password = getpass.getpass("New password: ")
-          confirm = getpass.getpass("Confirm password: ")
-          if new_password == confirm:
-            break
-          else:
-            print("Sorry, those don't match")
-        new_data = {}
-        for name in requiredAttributes:
-          new_data[name] = input("New value for {}: ".format(name))
-        yield auth.LoginWithPasswordRequest(Password=config.password, ChallengeData=new_data)
-
-
-  stream = auth_stub.LoginWithPassword(gen())
+  res = auth_stub.LoginWithPassword(auth.LoginWithPasswordRequest(username=config.username, password=config.password, sessionTypeRequest=auth.SessionTypeRequest(refresh=True)))
+  if res.HasField("challenge"):
+    print("Got a challenge from the server, not yet supported!", res.challenge);
+  else:
+    with open(config.session_file, "w") as f:
+      json.dump({
+        "accessToken": res.session.accessToken,
+        "tokenType": res.session.tokenType,
+        "refreshToken": res.session.refreshToken,
+      }, f)
 
 
 def refresh(channel, config):
   with open(config.session_file) as f:
     session = json.load(f)
   auth_stub = auth_grpc.AuthenticationStub(channel)
-  res = auth_stub.Refresh(auth.RefreshRequest(RefreshToken=session["RefreshToken"], Username=session["Username"]))
+  res = auth_stub.Refresh(auth.RefreshRequest(refreshToken=session["refreshToken"]))
+  print(res)
   with open(config.session_file, "w") as f:
     json.dump({
-      "AccessToken": res.AccessToken,
-      "Username": res.Username,
-      "TokenType": res.TokenType,
-      "RefreshToken": res.RefreshToken,
-      "IdToken": res.IdToken,
+      "accessToken": res.session.accessToken,
+      "tokenType": res.session.tokenType,
+      "refreshToken": res.session.refreshToken,
     }, f)
 
 
