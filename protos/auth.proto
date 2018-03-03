@@ -3,14 +3,27 @@ syntax = "proto3";
 option csharp_namespace = "ListenField.Client.Auth";
 package listenfield.auth;
 
+import "google/protobuf/timestamp.proto";
 import "api.proto";
+
+message SessionTypeRequest {
+  bool refresh = 1;
+  bool username = 2;
+  bool idToken = 3;
+}
 
 message LoginWithPasswordRequest {
   string username = 1;
   string password = 2;
   string mfaCode = 3;
+  SessionTypeRequest sessionTypeRequest = 4;
+}
+
+message ContinueLoginRequest {
+  string username = 1;
+  string continuationToken = 2;
+  string mfaCode = 3;
   map<string, string> challengeData = 4;
-  string continuationToken = 5;
 }
 
 message LoginChallenge {
@@ -29,10 +42,11 @@ message LoginChallenge {
 
 message SessionInfo {
   string accessToken = 1;
-  string username = 2;
-  string tokenType = 3;
-  string refreshToken = 4;
-  string idToken = 5;
+  string tokenType = 2;
+  google.protobuf.Timestamp expiresAt = 3;
+  string username = 4;
+  string refreshToken = 5;
+  string idToken = 6;
 }
 
 message LoginResult {
@@ -44,7 +58,8 @@ message LoginResult {
 
 message RefreshRequest {
   string refreshToken = 1;
-  string username = 2;
+  // the refresh field on the type request is ignored (assumed true)
+  SessionTypeRequest sessionTypeRequest = 2;
 }
 
 service Test {
@@ -52,6 +67,7 @@ service Test {
 }
 
 service Authentication {
-  rpc LoginWithPassword (stream LoginWithPasswordRequest) returns (stream LoginResult);
+  rpc LoginWithPassword (LoginWithPasswordRequest) returns (LoginResult);
+  rpc ContinueLogin (ContinueLoginRequest) returns (LoginResult);
   rpc Refresh (RefreshRequest) returns (SessionInfo);
 }
