@@ -40,11 +40,11 @@ def authenticatedCall(handler, message, metadata=None):
   if jose is not None:
     # Installing jose is optional, of course, but here's how you can use it to
     # check if the session is expired without having to go to the server.
-    token_data = jwt.get_unverified_claims(session["AccessToken"])
+    token_data = jwt.get_unverified_claims(session["accessToken"])
     if token_data["exp"] < time.time():
       print("Error: your session (session.json) expired, please refresh it first")
       sys.exit(1)
-  metadata.append(("authorization", "Bearer " + session["AccessToken"]))
+  metadata.append(("authorization", "Bearer " + session["accessToken"]))
   return handler(message, metadata=metadata)
 
 def echo():
