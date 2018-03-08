@@ -1,0 +1,12 @@
+{
+  "name": "listenfield-apis-grpc-web",
+  "dependencies": {
+    "grpc-tools": "^1.6.6",
+    "ts-protoc-gen": "^0.4.0"
+  },
+  "scripts": {
+    "generate-ts": "./node_modules/grpc-tools/bin/protoc --plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts --js_out=import_style=commonjs,binary:ts --ts_out=service=true:ts -I ../protos ../protos/api.proto ../protos/auth.proto ../protos/repo/catalog-rpc.proto ../protos/repo/catalog-types.proto ../protos/repo/common-rpc.proto ../protos/repo/common-types.proto ../protos/status.proto",
+    "generate-js": "./node_modules/grpc-tools/bin/protoc --plugin=protoc-gen-js=./node_modules/.bin/protoc-gen-js --js_out=import_style=commonjs,binary:js --ts_out=service=true:js -I ../protos ../protos/api.proto ../protos/auth.proto ../protos/repo/catalog-rpc.proto ../protos/repo/catalog-types.proto ../protos/repo/common-rpc.proto ../protos/repo/common-types.proto ../protos/status.proto",
+    "build": "npm run generate-js && npm run generate-ts"
+  }
+}
