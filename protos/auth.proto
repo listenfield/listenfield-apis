@@ -1,3 +1,7 @@
+/**
+ * ListenField authentication and authorization, token management, identity
+ * management, and related functionality
+ */
 syntax = "proto3";
 
 option csharp_namespace = "ListenField.Client.Auth";

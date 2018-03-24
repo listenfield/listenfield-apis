@@ -1,68 +1,135 @@
+/**
+ * This file has common definitions used by many ListenField APIs.
+ */
 syntax = "proto3";
 
 package listenfield;
 
 import "status.proto";
 
+/**
+ * Used for test services. Many APIs have a simple test service, which expects
+ * and returns an EchoMessage; if the request includes a message, the response
+ * will return the same, otherwise a default will be used.
+ */
 message EchoMessage {
   string message = 1;
 }
 
+/**
+ * Used as a sub-message for standard query calls, to specify how to sort the
+ * results.
+ */
 message SortCriterium {
+  // Field name to use as sort criterium.
   string field = 1;
+  // True for descending order, false for ascending.
   bool descending = 2;
 }
 
+/**
+ * Standard format for CRUD queries.
+ */
 message BatchedQueryRequest {
-  string search = 1; // full-text
-  string filter = 2; // json — in the format expected by MongoDB or CouchDB Find (Mango)
+  // Full-text search.
+  string search = 1;
+  // A JSON object containing filters in the format expected by MongoDB or
+  // CouchDB Find (Mango).
+  string filter = 2;
+  // One or more sort criteria, which are applied in the provided order.
   repeated SortCriterium sort = 3;
-  uint32 page_size = 4; // defaults to 20
-  string page_token = 5; // opaque — implementation can use it however is appropriate
+  // Maximum items to return; defaults to 20; if more items than that are
+  // available, a `page_token` will be returned, allowing a following call with
+  // the same parameters to get more items.
+  uint32 page_size = 4;
+  // An opaque identifier returned by a previous call, which can be used to get
+  // the next `page_size` items.
+  string page_token = 5;
 }
 
+/**
+ * Returned by standard CRUD queries, once per call, to express information
+ * about the query itself. Notably used for paging results, in conjunction with
+ * the `page_size` parameter in BatchedQueryRequest.
+ */
 message BatchedQueryMetadata {
+  // An opaque identifier that indicates more items are available than have
+  // been returned (due to paging). To get the next batch (page), repeat the
+  // call with the same parameters, but passing this token in the parameter of
+  // the same name.
   string page_token = 2;
+  // Number of items returned. Will never be more than `page_size`, but may be
+  // less if fewer items than that are available.
   uint32 count = 3;
+  // Total number of items that matched the search and filter.
   uint32 scanned = 4;
 }
 
+/**
+ * A request for a single item from a CRUD interface, by providing the UUID.
+ */
 message SimpleGetRequest {
   string uuid = 1;
 }
 
+/**
+ * Access control system for various resources. Grants access of a certain
+ * type, to a certain user or group, for a certain resource.
+ */
 message Grant {
   message TypeEnum {
     enum Value {
+      // Protobuf and gRPC use 0 as a default if omitted. In this case, to
+      // avoid mistakes, we don't want a default, so we make it an error.
       INVALID = 0;
-      read = 1;
-      write = 2;
-      grant = 3;
-      chown = 4;
+      read = 1; // Read access: request data about the resource.
+      write = 2; // Write access: make changes to the resource data.
+      grant = 3; // Create or revoke grants to the resource.
+      chown = 4; // Change the resource ownership.
     }
   }
 
-  // user or group uuid, or "PUBLIC"
+  // Who is the grant to? Can be a user or group uuid, or "PUBLIC".
   string grantee = 1;
+  // What kind of access?
   TypeEnum.Value type = 2;
 }
 
+/**
+ * A set of grants; typically the list of grants for a given resource.
+ */
 message GrantList {
   repeated Grant grants = 1;
 }
 
+/**
+ * Standard request to change the access control to one or more
+ * resources. Requires that the calling user has `grant` access to each
+ * provided resource, otherwise an error will be returned.
+ */
 message ChangeGrantsRequest {
+  // Resources to which the changes should be applied.
   repeated string uuids = 1;
+  // New grants to add. The service does *not* check for duplicates.
   repeated Grant add = 2;
+  // Grants to remove. If any of them are missing, they're ignored.
   repeated Grant remove = 3;
 }
 
+/**
+ * Returned by calls to change access control. For each resource in the
+ * request, one ChangeGrantsResult will be returned (in a stream).
+ */
 message ChangeGrantsResult {
+  // Resource UUID.
   string uuid = 1;
+  // New set of grants after the changes.
   repeated Grant grants = 2;
+  // Error, if any, while applying the changes.
   google.rpc.Status error = 3;
 }
 
+// @exclude
 // copy this into each package where applicable
 // service Test {
 //   rpc Echo (listenfield.EchoMessage) returns (listenfield.EchoMessage);
